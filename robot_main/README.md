@@ -12,17 +12,24 @@ Combined sketch: **joystick-controlled DC motors** (L298N) + **Wall-E Solar Char
 - External power supply for the motors (7–12 V)
 - Jumper wires
 
-## Pin Conflict Resolution
+## Pin Map
 
-The standalone sketches shared **GPIO 23** and **GPIO 32**. This combined sketch resolves the conflicts:
-
-| Pin    | `control_dc_motors` | `display_tft` | **`robot_main`**       |
-| ------ | ------------------- | ------------- | ---------------------- |
-| 23     | SW (button)         | TFT SDA/MOSI  | _(freed)_              |
-| 32     | ENB (motor PWM)     | TFT DC        | ENB stays (motor)      |
-| **4**  | —                   | —             | **SW** (button, moved) |
-| **2**  | —                   | —             | **TFT DC** (moved)     |
-| **13** | —                   | —             | **TFT MOSI** (moved)   |
+| GPIO | Function             | Peripheral |
+| ---- | -------------------- | ---------- |
+| 2    | TFT DC / AO          | ST7735     |
+| 4    | Joystick SW (button)  | Joystick   |
+| 5    | TFT CS               | ST7735     |
+| 13   | TFT SDA / MOSI       | ST7735     |
+| 14   | ENA (Motor A PWM)    | L298N      |
+| 15   | TFT RST              | ST7735     |
+| 18   | TFT SCK              | ST7735     |
+| 25   | IN3 (Motor B dir)    | L298N      |
+| 26   | IN2 (Motor A dir)    | L298N      |
+| 27   | IN1 (Motor A dir)    | L298N      |
+| 32   | ENB (Motor B PWM)    | L298N      |
+| 33   | IN4 (Motor B dir)    | L298N      |
+| 34   | VRX (horizontal)     | Joystick   |
+| 35   | VRY (vertical)       | Joystick   |
 
 ## Wiring
 

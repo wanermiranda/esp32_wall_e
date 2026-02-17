@@ -4,11 +4,6 @@
  * Combines:
  *   • DC motor control via L298N (joystick-driven, differential drive)
  *   • Wall-E Solar Charge Level gauge on ST7735 TFT
- *
- * Pin conflict resolution (vs the standalone sketches):
- *   TFT_DC   32 → 2   (GPIO 32 needed for Motor B ENB)
- *   TFT_MOSI 23 → 13  (GPIO 23 needed for joystick SW)
- *   SW       23 → 4   (GPIO 23 freed for TFT, SW moved)
  */
 
 #include <ezButton.h>

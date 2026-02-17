@@ -26,7 +26,7 @@ Portrait mode, 128×160 pixels:
 ## Wiring (ESP32 → ST7735)
 
 | ESP32 Pin | TFT Pin |
-|-----------|---------|
+| --------- | ------- |
 | 5         | CS      |
 | 15        | RST     |
 | 32        | DC / AO |

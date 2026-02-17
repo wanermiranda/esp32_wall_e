@@ -10,11 +10,11 @@ A simple Arduino sketch to test controlling a servo motor using an ESP32 WROOM b
 
 ## Wiring
 
-| Component   | ESP32 GPIO |
-|-------------|------------|
-| Servo signal | GPIO 26   |
-| Output pin 1 | GPIO 18   |
-| Output pin 2 | GPIO 25   |
+| Component    | ESP32 GPIO |
+| ------------ | ---------- |
+| Servo signal | GPIO 26    |
+| Output pin 1 | GPIO 18    |
+| Output pin 2 | GPIO 25    |
 
 ## How It Works
 

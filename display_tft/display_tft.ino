@@ -24,22 +24,29 @@
 Adafruit_ST7735 tft = Adafruit_ST7735(TFT_CS, TFT_DC, TFT_MOSI, TFT_SCLK, TFT_RST);
 
 // ── Gauge layout constants ────────────────────────────────────────
-// Screen is 160 x 128 in landscape (rotation 1)
+// Screen is 128 x 160 in portrait (rotation 2)
+// Two-column layout below title:
+//   Left column  (x 6..38)  : sun icon + percentage
+//   Right column (x 44..122): charge bars
 
 // Total number of charge bars
-#define NUM_BARS 10
+#define NUM_BARS 12
 
-// Bar area geometry
-#define BAR_AREA_X 44 // Left edge of bar area (right of sun)
-#define BAR_AREA_Y 52 // Top of bar area
-#define BAR_W 104     // Width of each bar  (fills to right edge - margin)
-#define BAR_H 6       // Height of each bar
+// Left column (sun + percentage)
+#define LEFT_COL_CX 22     // Centre X of left column
+#define SUN_CX LEFT_COL_CX // Sun icon centre X
+#define SUN_CY 55          // Sun icon centre Y
+
+// Right column (bars)
+#define BAR_AREA_X 44 // Left edge of bar area
+#define BAR_AREA_Y 32 // Top of first bar
+#define BAR_W 76      // Width of each bar
+#define BAR_H 8       // Height of each bar
 #define BAR_GAP 2     // Gap between bars
 #define BAR_AREA_BOTTOM (BAR_AREA_Y + NUM_BARS * (BAR_H + BAR_GAP) - BAR_GAP)
 
-// Sun icon centre
-#define SUN_CX 20
-#define SUN_CY 78
+// Vertical separator X between columns
+#define COL_SEP_X 40
 
 // ── State ─────────────────────────────────────────────────────────
 int chargeLevel = 0;      // Current charge (0 .. NUM_BARS)
@@ -94,70 +101,30 @@ void drawGaugeFrame()
 {
   tft.fillScreen(BLACK);
 
-  // ── Title text ──────────────────────────────────────────────────
-  // "SOLAR CHARGE" on first line, "LEVEL" on second, centred-ish
+  // ── Title text (single line, centred) ───────────────────────────
   tft.setTextColor(WALLE_GREEN);
-  tft.setTextSize(1);
+  tft.setTextSize(1); // 6x8 font → "SOLAR CHARGE LEVEL" fits 128px
 
-  // First line
-  const char *line1 = "SOLAR CHARGE";
+  const char *title = "SOLAR CHARGE LEVEL";
   int16_t x1, y1;
   uint16_t tw, th;
-  tft.getTextBounds(line1, 0, 0, &x1, &y1, &tw, &th);
-  tft.setCursor((160 - tw) / 2, 6);
-  tft.print(line1);
-
-  // Second line
-  const char *line2 = "LEVEL";
-  tft.getTextBounds(line2, 0, 0, &x1, &y1, &tw, &th);
-  tft.setCursor((160 - tw) / 2, 18);
-  tft.print(line2);
+  tft.getTextBounds(title, 0, 0, &x1, &y1, &tw, &th);
+  tft.setCursor((128 - tw) / 2, 8);
+  tft.print(title);
 
   // Thin decorative line under the title
-  tft.drawFastHLine(10, 32, 140, WALLE_DIM);
-  tft.drawFastHLine(10, 33, 140, WALLE_DARK);
+  tft.drawFastHLine(8, 22, 112, WALLE_DIM);
+  tft.drawFastHLine(8, 23, 112, WALLE_DARK);
 
-  // ── Decorative border (like a CRT bezel) ────────────────────────
-  tft.drawRect(2, 2, 156, 124, WALLE_DIM);
-  tft.drawRect(3, 3, 154, 122, WALLE_DARK);
+  // ── Decorative border (CRT bezel) ──────────────────────────────
+  tft.drawRect(2, 2, 124, 156, WALLE_DIM);
+  tft.drawRect(3, 3, 122, 154, WALLE_DARK);
 
-  // ── Sun icon on the left side, vertically centred in bar area ───
+  // ── Vertical separator between left and right columns ──────────
+  tft.drawFastVLine(COL_SEP_X, 26, 128, WALLE_DARK);
+
+  // ── Left column: Sun icon ──────────────────────────────────────
   drawSun(SUN_CX, SUN_CY, WALLE_GREEN);
-
-  // Small label under the sun
-  tft.setTextSize(1);
-  tft.setTextColor(WALLE_DIM);
-  const char *sunLabel = "SOL";
-  tft.getTextBounds(sunLabel, 0, 0, &x1, &y1, &tw, &th);
-  tft.setCursor(SUN_CX - tw / 2, SUN_CY + 16);
-  tft.print(sunLabel);
-
-  // ── Thin vertical separator between sun and bars ────────────────
-  tft.drawFastVLine(BAR_AREA_X - 5, BAR_AREA_Y - 4, BAR_AREA_BOTTOM - BAR_AREA_Y + 8, WALLE_DARK);
-
-  // ── Draw label above bars ───────────────────────────────────────
-  tft.setTextColor(WALLE_DIM);
-  tft.setTextSize(1);
-  tft.setCursor(BAR_AREA_X, BAR_AREA_Y - 12);
-  tft.print(F("CHG"));
-
-  // Right-aligned percentage placeholder
-  tft.setCursor(BAR_AREA_X + BAR_W - 24, BAR_AREA_Y - 12);
-  tft.print(F("  %"));
-}
-
-// Update the percentage text (right side above bars)
-void drawPercentage(int pct)
-{
-  // Clear area
-  tft.fillRect(BAR_AREA_X + BAR_W - 30, BAR_AREA_Y - 13, 30, 10, BLACK);
-  tft.setTextColor(WALLE_GREEN);
-  tft.setTextSize(1);
-
-  char buf[5];
-  sprintf(buf, "%3d%%", pct);
-  tft.setCursor(BAR_AREA_X + BAR_W - 24, BAR_AREA_Y - 12);
-  tft.print(buf);
 }
 
 // ══════════════════════════════════════════════════════════════════
@@ -169,7 +136,7 @@ void setup()
   Serial.println(F("Wall-E Solar Charge Gauge starting..."));
 
   tft.initR(INITR_BLACKTAB);
-  tft.setRotation(1); // Landscape 160x128
+  tft.setRotation(2); // Portrait 128x160
 
   drawGaugeFrame();
 
@@ -178,7 +145,6 @@ void setup()
   {
     drawBar(i, false);
   }
-  drawPercentage(0);
 
   delay(500);
   Serial.println(F("Ready."));
@@ -232,14 +198,10 @@ void loop()
       }
     }
 
-    // Update percentage readout
-    int pct = (chargeLevel * 100) / NUM_BARS;
-    drawPercentage(pct);
-
     prevChargeLevel = chargeLevel;
 
     Serial.print(F("Charge: "));
-    Serial.print(pct);
+    Serial.print((chargeLevel * 100) / NUM_BARS);
     Serial.println(F("%"));
   }
 }

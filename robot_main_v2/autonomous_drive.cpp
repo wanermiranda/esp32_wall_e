@@ -15,7 +15,7 @@ namespace
 {
     DriveState driveState = DRIVE_FORWARD_1;
     unsigned long stateStartMs = 0;
-    bool autonomousDriveEnabled = true;
+    bool autonomousDriveEnabled = false;
 
     void setDriveState(DriveState nextState)
     {
@@ -50,7 +50,9 @@ namespace
 
 void initAutonomousDrive()
 {
-    setDriveState(DRIVE_FORWARD_1);
+    driveState = DRIVE_FORWARD_1;
+    stateStartMs = millis();
+    stopMotors();
 }
 
 void updateAutonomousDrive()

@@ -8,7 +8,7 @@
 namespace
 {
     Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
-    bool autoPoseEnabled = true;
+    bool autoPoseEnabled = false;
 
     int currentAngleByChannel[RobotConst::SERVO_CONTROLLER_CHANNELS];
     int targetAngleByChannel[RobotConst::SERVO_CONTROLLER_CHANNELS];

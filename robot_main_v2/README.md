@@ -67,6 +67,7 @@ On boot, the ESP32 creates an AP:
 
 The sketch prevents control conflicts by explicit mode arbitration:
 
+- Startup default is fully manual-safe: `auto_drive=off` and `auto_pose=off`.
 - Any valid `motion` command disables autonomous drive and directly controls motors.
 - Any valid servo command (`head`, `left_arm`, `right_arm`) disables servo auto-pose and applies manual targets.
 - System commands can re-enable/disable background behaviors:

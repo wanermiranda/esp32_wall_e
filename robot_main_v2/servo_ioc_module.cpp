@@ -8,6 +8,7 @@
 namespace
 {
     Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
+    bool autoPoseEnabled = true;
 
     int currentAngleByChannel[RobotConst::SERVO_CONTROLLER_CHANNELS];
     int targetAngleByChannel[RobotConst::SERVO_CONTROLLER_CHANNELS];
@@ -86,9 +87,6 @@ namespace
 
     void setLeftArmTarget(int angle)
     {
-        if (!isHeadCentered())
-            return;
-
         int safeArmAngle = constrain(angle, RobotConst::ARM_ANGLE_MIN, RobotConst::ARM_ANGLE_MAX);
         int invertedAngle = 180 - safeArmAngle;
         setServoTargetById(RobotConst::LEFT_ARM_SERVO_ID, invertedAngle);
@@ -96,9 +94,6 @@ namespace
 
     void setRightArmTarget(int angle)
     {
-        if (!isHeadCentered())
-            return;
-
         int safeArmAngle = constrain(angle, RobotConst::ARM_ANGLE_MIN, RobotConst::ARM_ANGLE_MAX);
         setServoTargetById(RobotConst::RIGHT_ARM_SERVO_ID, safeArmAngle);
     }
@@ -212,6 +207,9 @@ void updateServoIOC()
 {
     updateAllServos();
 
+    if (!autoPoseEnabled)
+        return;
+
     unsigned long now = millis();
     if (now - poseStartMs < RobotConst::POSE_DELAY_MS)
         return;
@@ -227,4 +225,36 @@ void updateServoIOC()
     pose = nextPose(pose);
     poseApplied = false;
     poseStartMs = now;
+}
+
+void setServoAutoPoseEnabled(bool enabled)
+{
+    autoPoseEnabled = enabled;
+
+    if (enabled)
+    {
+        pose = POSE_CENTER;
+        poseApplied = false;
+        poseStartMs = millis();
+    }
+}
+
+bool isServoAutoPoseEnabled()
+{
+    return autoPoseEnabled;
+}
+
+void setHeadServoAngle(int angle)
+{
+    setHeadTarget(angle);
+}
+
+void setLeftArmServoAngle(int angle)
+{
+    setLeftArmTarget(angle);
+}
+
+void setRightArmServoAngle(int angle)
+{
+    setRightArmTarget(angle);
 }

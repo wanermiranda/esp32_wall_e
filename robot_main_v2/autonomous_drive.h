@@ -3,5 +3,7 @@
 
 void initAutonomousDrive();
 void updateAutonomousDrive();
+void setAutonomousDriveEnabled(bool enabled);
+bool isAutonomousDriveEnabled();
 
 #endif

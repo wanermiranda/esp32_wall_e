@@ -15,6 +15,7 @@ namespace
 {
     DriveState driveState = DRIVE_FORWARD_1;
     unsigned long stateStartMs = 0;
+    bool autonomousDriveEnabled = true;
 
     void setDriveState(DriveState nextState)
     {
@@ -54,6 +55,9 @@ void initAutonomousDrive()
 
 void updateAutonomousDrive()
 {
+    if (!autonomousDriveEnabled)
+        return;
+
     unsigned long now = millis();
     unsigned long elapsed = now - stateStartMs;
 
@@ -80,4 +84,19 @@ void updateAutonomousDrive()
             setDriveState(DRIVE_FORWARD_1);
         break;
     }
+}
+
+void setAutonomousDriveEnabled(bool enabled)
+{
+    autonomousDriveEnabled = enabled;
+
+    if (enabled)
+    {
+        setDriveState(DRIVE_FORWARD_1);
+    }
+}
+
+bool isAutonomousDriveEnabled()
+{
+    return autonomousDriveEnabled;
 }

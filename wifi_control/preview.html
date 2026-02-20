@@ -13,6 +13,8 @@
 		.motion-wrap { display: grid; grid-template-columns: 1fr 170px; gap: 10px; align-items: start; }
 		.pad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
 		.row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+		.arm-col { display: grid; grid-template-columns: 1fr; gap: 8px; }
+		.arms-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
 		.speed-box { background: #111827; border-radius: 10px; padding: 10px; }
 		.speed-box label { display: block; margin-bottom: 8px; font-size: 0.9rem; }
 		.speed-box input[type="range"] { width: 100%; }
@@ -34,15 +36,15 @@
 			<h2>Motion</h2>
 			<div class="motion-wrap">
 				<div class="pad">
-					<div class="empty"></div>
+					<button onpointerdown="startMotion('forward_left')">↖</button>
 					<button onpointerdown="startMotion('forward')">▲</button>
-					<div class="empty"></div>
+					<button onpointerdown="startMotion('forward_right')">↗</button>
 					<button onpointerdown="startMotion('left')">◀</button>
 					<button onpointerdown="stopMotion()">■</button>
 					<button onpointerdown="startMotion('right')">▶</button>
-					<div class="empty"></div>
+					<button onpointerdown="startMotion('backward_left')">↙</button>
 					<button onpointerdown="startMotion('backward')">▼</button>
-					<div class="empty"></div>
+					<button onpointerdown="startMotion('backward_right')">↘</button>
 				</div>
 				<div class="speed-box">
 					<label for="speedRange">Speed</label>
@@ -61,21 +63,23 @@
 			</div>
 		</div>
 
-		<div class="card">
-			<h2>Left Arm</h2>
-			<div class="row">
-				<button onclick="send('left_arm','up')">Up</button>
-				<button onclick="send('left_arm','center')">Center</button>
-				<button onclick="send('left_arm','down')">Down</button>
+		<div class="arms-grid">
+			<div class="card">
+				<h2>Left Arm</h2>
+				<div class="arm-col">
+					<button onclick="send('left_arm','up')">Up</button>
+					<button onclick="send('left_arm','center')">Center</button>
+					<button onclick="send('left_arm','down')">Down</button>
+				</div>
 			</div>
-		</div>
 
-		<div class="card">
-			<h2>Right Arm</h2>
-			<div class="row">
-				<button onclick="send('right_arm','up')">Up</button>
-				<button onclick="send('right_arm','center')">Center</button>
-				<button onclick="send('right_arm','down')">Down</button>
+			<div class="card">
+				<h2>Right Arm</h2>
+				<div class="arm-col">
+					<button onclick="send('right_arm','up')">Up</button>
+					<button onclick="send('right_arm','center')">Center</button>
+					<button onclick="send('right_arm','down')">Down</button>
+				</div>
 			</div>
 		</div>
 

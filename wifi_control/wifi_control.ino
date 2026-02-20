@@ -17,6 +17,7 @@ namespace
         if (target == "motion")
         {
             int safeSpeed = constrain(speed, 0, 255);
+            int arcSpeed = safeSpeed / 2;
 
             if (action == "forward")
                 return "MOTION FORWARD -> driveTank(" + String(safeSpeed) + "," + String(safeSpeed) + ")";
@@ -26,6 +27,14 @@ namespace
                 return "MOTION LEFT -> driveTank(" + String(-safeSpeed) + "," + String(safeSpeed) + ")";
             if (action == "right")
                 return "MOTION RIGHT -> driveTank(" + String(safeSpeed) + "," + String(-safeSpeed) + ")";
+            if (action == "forward_left")
+                return "MOTION FORWARD_LEFT -> driveTank(" + String(arcSpeed) + "," + String(safeSpeed) + ")";
+            if (action == "forward_right")
+                return "MOTION FORWARD_RIGHT -> driveTank(" + String(safeSpeed) + "," + String(arcSpeed) + ")";
+            if (action == "backward_left")
+                return "MOTION BACKWARD_LEFT -> driveTank(" + String(-arcSpeed) + "," + String(-safeSpeed) + ")";
+            if (action == "backward_right")
+                return "MOTION BACKWARD_RIGHT -> driveTank(" + String(-safeSpeed) + "," + String(-arcSpeed) + ")";
             if (action == "stop")
                 return "MOTION STOP -> stopMotors()";
         }

@@ -9,14 +9,21 @@ Simple HTTP remote for ESP32 that serves a web page with directional controls fo
 
 This sketch does **not** drive hardware modules directly. It only logs compatible command intents to `Serial`.
 
-## Design decision: inline HTML in sketch
+## Project structure
 
-For this project, the control page remains embedded directly in `wifi_control.ino`.
+- `wifi_control.ino` → HTTP routes and command mapping
+- `wifi_ap.cpp/.h` → AP (hotspot) setup and SSID exposure
+- `web_ui.cpp/.h` → Embedded HTML/CSS/JS UI page
+- `preview.html` → Browser-only local preview of the UI
+
+## Design decision: embedded HTML source module
+
+For this project, the control page is embedded in firmware as C++ source (now in `web_ui.cpp`).
 
 Reason:
 
 - We are intentionally avoiding a SPIFFS-based split HTML approach because SPIFFS is no longer actively maintained.
-- Keeping a single sketch avoids extra filesystem upload/mount steps and keeps deployment simple for this hotspot-only controller.
+- Keeping the UI embedded in source avoids extra filesystem upload/mount steps and keeps deployment simple for this hotspot-only controller.
 
 If the UI grows later, we can migrate to a maintained filesystem approach (for example LittleFS) and serve `index.html` as a separate file.
 
@@ -35,6 +42,13 @@ No external Wi-Fi credentials are required in this mode.
 - `GET /cmd?target=<...>&action=<...>` → Sends command (and logs to Serial)
 - `GET /status` → Last accepted command
 
+## UI behavior
+
+- Motion buttons use **press-and-hold** behavior (release sends `stop`).
+- Motion includes diagonals (`↖ ↗ ↙ ↘`).
+- Motion speed is controlled by slider (`60..255`, default `185`) and sent as `speed` query parameter.
+- Left/Right arm cards are displayed as two columns, including on small screens.
+
 ## Command mapping (v2-compatible intent)
 
 ### Motion
@@ -43,6 +57,10 @@ No external Wi-Fi credentials are required in this mode.
 - `motion + backward` → `MOTION BACKWARD -> driveTank(-185,-185)`
 - `motion + left` → `MOTION LEFT -> driveTank(-165,165)`
 - `motion + right` → `MOTION RIGHT -> driveTank(165,-165)`
+- `motion + forward_left` → `MOTION FORWARD_LEFT -> driveTank(speed/2,speed)`
+- `motion + forward_right` → `MOTION FORWARD_RIGHT -> driveTank(speed,speed/2)`
+- `motion + backward_left` → `MOTION BACKWARD_LEFT -> driveTank(-speed/2,-speed)`
+- `motion + backward_right` → `MOTION BACKWARD_RIGHT -> driveTank(-speed,-speed/2)`
 - `motion + stop` → `MOTION STOP -> stopMotors()`
 
 ### Head

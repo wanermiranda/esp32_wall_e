@@ -2,6 +2,8 @@
 
 A simple Arduino sketch to test controlling a servo motor using an ESP32 WROOM board with the `ESP32Servo` library.
 
+This example uses **direct PWM from the ESP32** and **does not use an I2C servo module** (such as PCA9685).
+
 ## Hardware Requirements
 
 - ESP32 WROOM development board

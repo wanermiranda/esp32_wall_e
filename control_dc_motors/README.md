@@ -2,6 +2,8 @@
 
 An Arduino sketch that drives two DC motors through an **L298N** H-bridge using **analog joystick input** (VRX / VRY) with differential-drive mixing and proportional speed control.
 
+This module uses an **L298N motor driver** with **differential-drive mixing**: joystick input is converted into left/right motor speed commands (`setMotorA`, `setMotorB`, `stopMotors`).
+
 ## Hardware Requirements
 
 - ESP32 WROOM development board

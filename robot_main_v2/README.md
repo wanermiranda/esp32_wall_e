@@ -5,7 +5,7 @@ Integrated robot sketch for ESP32 WROOM combining:
 - DC motor control (L298N)
 - Autonomous drive state machine
 - TFT Wall-E style solar charge gauge (ST7735)
-- Servo IOC control via PCA9685 (head + arms)
+- Servo I2C control via PCA9685 (head + arms)
 - Wi-Fi AP + web control UI (motion, servos, mode toggles)
 
 ## Hardware Requirements

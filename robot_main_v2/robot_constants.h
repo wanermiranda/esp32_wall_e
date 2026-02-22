@@ -10,6 +10,8 @@ namespace RobotConst
     constexpr int PWM_CHANNEL_A = 0;
     constexpr int PWM_CHANNEL_B = 1;
     constexpr int PWM_RESOLUTION = 8;
+    constexpr bool MOTOR_A_INVERTED = true;
+    constexpr bool MOTOR_B_INVERTED = true;
 
     // ─── Autonomous drive ─────────────────────────────────────────
     constexpr uint8_t FORWARD_SPEED = 185;
@@ -60,9 +62,9 @@ namespace RobotPins
     constexpr uint8_t ENA_PIN = 14;
     constexpr uint8_t IN1_PIN = 27;
     constexpr uint8_t IN2_PIN = 26;
-    constexpr uint8_t ENB_PIN = 32;
     constexpr uint8_t IN3_PIN = 25;
     constexpr uint8_t IN4_PIN = 33;
+    constexpr uint8_t ENB_PIN = 32;
 
     // ─── TFT pins ─────────────────────────────────────────────────
     constexpr uint8_t TFT_CS = 5;

@@ -15,15 +15,17 @@ void initMotors()
 
 void setMotorA(bool fwd, uint8_t spd)
 {
-    digitalWrite(RobotPins::IN1_PIN, fwd ? HIGH : LOW);
-    digitalWrite(RobotPins::IN2_PIN, fwd ? LOW : HIGH);
+    bool actualFwd = RobotConst::MOTOR_A_INVERTED ? !fwd : fwd;
+    digitalWrite(RobotPins::IN1_PIN, actualFwd ? HIGH : LOW);
+    digitalWrite(RobotPins::IN2_PIN, actualFwd ? LOW : HIGH);
     ledcWrite(RobotPins::ENA_PIN, spd);
 }
 
 void setMotorB(bool fwd, uint8_t spd)
 {
-    digitalWrite(RobotPins::IN3_PIN, fwd ? HIGH : LOW);
-    digitalWrite(RobotPins::IN4_PIN, fwd ? LOW : HIGH);
+    bool actualFwd = RobotConst::MOTOR_B_INVERTED ? !fwd : fwd;
+    digitalWrite(RobotPins::IN3_PIN, actualFwd ? HIGH : LOW);
+    digitalWrite(RobotPins::IN4_PIN, actualFwd ? LOW : HIGH);
     ledcWrite(RobotPins::ENB_PIN, spd);
 }
 
